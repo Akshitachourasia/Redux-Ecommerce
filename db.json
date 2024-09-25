@@ -1,0 +1,83 @@
+[
+    {
+      "id": 1,
+      "name": "Wireless Mouse",
+      "description": "Ergonomic wireless mouse with long battery life.",
+      "price": 29.99,
+      "image": "https://example.com/images/wireless-mouse.jpg",
+      "category": "Electronics"
+    },
+    {
+      "id": 2,
+      "name": "Bluetooth Headphones",
+      "description": "Over-ear headphones with noise-cancellation feature.",
+      "price": 89.99,
+      "image": "https://example.com/images/bluetooth-headphones.jpg",
+      "category": "Electronics"
+    },
+    {
+      "id": 3,
+      "name": "Smartphone Stand",
+      "description": "Adjustable stand compatible with most smartphones.",
+      "price": 15.99,
+      "image": "https://example.com/images/smartphone-stand.jpg",
+      "category": "Accessories"
+    },
+    {
+      "id": 4,
+      "name": "Gaming Keyboard",
+      "description": "Mechanical keyboard with RGB backlighting.",
+      "price": 69.99,
+      "image": "https://example.com/images/gaming-keyboard.jpg",
+      "category": "Electronics"
+    },
+    {
+      "id": 5,
+      "name": "Yoga Mat",
+      "description": "Non-slip yoga mat for comfortable practice.",
+      "price": 29.99,
+      "image": "https://example.com/images/yoga-mat.jpg",
+      "category": "Fitness"
+    },
+    {
+      "id": 6,
+      "name": "Laptop Backpack",
+      "description": "Spacious backpack with multiple compartments.",
+      "price": 49.99,
+      "image": "https://example.com/images/laptop-backpack.jpg",
+      "category": "Accessories"
+    },
+    {
+      "id": 7,
+      "name": "4K Ultra HD TV",
+      "description": "55-inch 4K Ultra HD Smart TV with HDR.",
+      "price": 599.99,
+      "image": "https://example.com/images/4k-tv.jpg",
+      "category": "Electronics"
+    },
+    {
+      "id": 8,
+      "name": "Wireless Charger",
+      "description": "Fast wireless charging pad compatible with Qi devices.",
+      "price": 24.99,
+      "image": "https://example.com/images/wireless-charger.jpg",
+      "category": "Electronics"
+    },
+    {
+      "id": 9,
+      "name": "Coffee Maker",
+      "description": "Brew coffee at home with this programmable coffee maker.",
+      "price": 79.99,
+      "image": "https://example.com/images/coffee-maker.jpg",
+      "category": "Home Appliances"
+    },
+    {
+      "id": 10,
+      "name": "Fitness Tracker",
+      "description": "Track your fitness goals with this smart tracker.",
+      "price": 49.99,
+      "image": "https://example.com/images/fitness-tracker.jpg",
+      "category": "Fitness"
+    }
+  ]
+  
