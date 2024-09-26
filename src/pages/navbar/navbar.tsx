@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -7,15 +7,10 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
-import Badge from "@mui/material/Badge";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import MoreIcon from "@mui/icons-material/MoreVert";
+import { Avatar, Popover, Button } from "@mui/material";
+import AuthContext from "../../context/auth-context";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -57,104 +52,24 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Navbar() {
+  const { logout } = React.useContext(AuthContext);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    React.useState<null | HTMLElement>(null);
-
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const location = window.location;
+  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-
-  const handleMenuClose = () => {
+  const handlePopoverClose = () => {
     setAnchorEl(null);
-    handleMobileMenuClose();
   };
 
-  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setMobileMoreAnchorEl(event.currentTarget);
+  const isPopoverOpen = Boolean(anchorEl);
+  const popoverId = isPopoverOpen ? "simple-popover" : undefined;
+
+  const handleLogout = () => {
+    logout();
+    location.href = "/auth/login";
   };
-
-  const menuId = "primary-search-account-menu";
-  const mobileMenuId = "primary-search-account-menu-mobile";
-
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-    </Menu>
-  );
-
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
-  );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -181,13 +96,65 @@ export default function Navbar() {
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
-          <Link to="/dashboard/products" style={{ marginLeft: 20, color: 'white', textDecoration: 'none' }}>Products</Link>
-          <Link to="/dashboard/about" style={{ marginLeft: 20, color: 'white', textDecoration: 'none' }}>About</Link>
-          <Link to="/dashboard/contact" style={{ marginLeft: 20, color: 'white', textDecoration: 'none' }}>Contact</Link>
+          <Link
+            to="/dashboard/products"
+            style={{ marginLeft: 20, color: "white", textDecoration: "none" }}
+          >
+            Products
+          </Link>
+          <Link
+            to="/dashboard/orders"
+            style={{ marginLeft: 20, color: "white", textDecoration: "none" }}
+          >
+            Orders
+          </Link>
+          <Link
+            to="/dashboard/cart"
+            style={{ marginLeft: 20, color: "white", textDecoration: "none" }}
+          >
+            Cart
+          </Link>
+          <Link
+            to="/dashboard/about"
+            style={{ marginLeft: 20, color: "white", textDecoration: "none" }}
+          >
+            About
+          </Link>
+          <Link
+            to="/dashboard/contact"
+            style={{ marginLeft: 20, color: "white", textDecoration: "none" }}
+          >
+            Contact
+          </Link>
+
+          <IconButton sx={{ ml: 2 }} onClick={handlePopoverOpen}>
+            <Avatar sx={{ backgroundColor: "rgba(63, 81, 181, 0.5)" }}></Avatar>
+          </IconButton>
+          <Popover
+            id={popoverId}
+            open={isPopoverOpen}
+            anchorEl={anchorEl}
+            onClose={handlePopoverClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center",
+            }}
+          >
+            <Box sx={{ p: 1, minWidth: "100px" }}>
+              <Button
+                onClick={handleLogout}
+                sx={{
+                  textTransform: "none",
+                  fontSize: "0.875rem",
+                  m: 0,
+                }}
+              >
+                Logout
+              </Button>
+            </Box>
+          </Popover>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
     </Box>
   );
 }

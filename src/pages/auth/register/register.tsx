@@ -20,6 +20,7 @@ const Register = () => {
     password: "",
   });
 
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,6 +33,21 @@ const Register = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
+
+    const userExists = existingUsers.find(
+      (user: { email: string; username: string }) =>
+        user.email === formData.email || user.username === formData.username
+    );
+
+    if (userExists) {
+      setError("Username or email already exists.");
+      return;
+    }
+
+    existingUsers.push(formData);
+    localStorage.setItem("users", JSON.stringify(existingUsers));
+
     login(formData.email, formData.password);
     navigate("/dashboard");
   };
@@ -51,6 +67,15 @@ const Register = () => {
           >
             Register
           </Typography>
+          {error && (
+            <Typography
+              color="error"
+              align="center"
+              style={{ marginBottom: "15px" }}
+            >
+              {error}
+            </Typography>
+          )}
           <form onSubmit={handleSubmit}>
             <TextField
               margin="normal"

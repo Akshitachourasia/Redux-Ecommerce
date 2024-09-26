@@ -6,6 +6,7 @@ export const AuthContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
@@ -19,15 +20,17 @@ export const AuthContextProvider = ({
       JSON.stringify({ email, password, isAuthenticated: true })
     );
     setIsAuthenticated(true);
+    setUser(user);
   };
 
   const logout = () => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("user")
+    setUser(null);
     setIsAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout , user }}>
       {children}
     </AuthContext.Provider>
   );

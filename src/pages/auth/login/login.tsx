@@ -1,22 +1,24 @@
+import React, { useContext, useState } from "react";
 import {
-  Avatar,
+  TextField,
   Button,
   Container,
-  Grid2,
-  Paper,
-  TextField,
   Typography,
+  Paper,
+  Avatar,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../../context/auth-context";
 
 const Login = () => {
+  const { login } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const { login } = useContext(AuthContext);
+
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,9 +30,21 @@ const Login = () => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    login(formData.email, formData.password);
-    navigate("/dashboard");
+    e.preventDefault(); 
+
+    const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
+
+    const user = existingUsers.find(
+      (user: { email: string; password: string; }) =>
+        user.email === formData.email && user.password === formData.password
+    );
+
+    if (user) {
+      login(formData.email, formData.password);
+      navigate("/dashboard");
+    } else {
+      setError("Invalid email or password.");
+    }
   };
 
   return (
@@ -38,6 +52,7 @@ const Login = () => {
       <Container component="main" maxWidth="xs">
         <Paper elevation={10} style={{ padding: "30px", borderRadius: "10px" }}>
           <Avatar style={{ margin: "auto", backgroundColor: "#3f51b5" }}>
+            <LockOutlinedIcon />
           </Avatar>
           <Typography
             variant="h5"
@@ -47,6 +62,11 @@ const Login = () => {
           >
             Login
           </Typography>
+          {error && (
+            <Typography color="error" align="center" style={{ marginBottom: "15px" }}>
+              {error}
+            </Typography>
+          )}
           <form onSubmit={handleSubmit}>
             <TextField
               margin="normal"
@@ -90,18 +110,6 @@ const Login = () => {
             </Button>
           </form>
         </Paper>
-        <Grid2 container justifyContent="center" style={{ marginTop: "15px" }}>
-          <Typography variant="body2">
-            Don't have an account?
-            <Button
-              onClick={() => navigate("/auth/register")}
-              color="primary"
-              style={{ textTransform: "none" }}
-            >
-              Register
-            </Button>
-          </Typography>
-        </Grid2>
       </Container>
       <footer className="mt-10 text-gray-200">
         &copy; 2024 My Ecommerce App. All rights reserved.
