@@ -1,22 +1,30 @@
+import React, { useContext, useState } from "react";
 import {
-  Avatar,
+  TextField,
   Button,
   Container,
-  Grid2,
-  Paper,
-  TextField,
   Typography,
+  Paper,
+  Avatar,
+  Grid2,
+  Box,
+  FormLabel,
+  Dialog,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../../../context/auth-context";
+import ForgotPassword from "../forgot-password/forgot-password";
 
 const Login = () => {
+  const { login } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const { login } = useContext(AuthContext);
+
+  const [error, setError] = useState("");
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,10 +35,29 @@ const Login = () => {
     });
   };
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    login(formData.email, formData.password);
-    navigate("/dashboard");
+
+    const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
+
+    const user = existingUsers.find(
+      (user: { email: string; password: string }) =>
+        user.email === formData.email && user.password === formData.password
+    );
+    if (user) {
+      login(formData.email, formData.password);
+      navigate("/dashboard");
+    } else {
+      setError("Invalid email or password.");
+    }
   };
 
   return (
@@ -38,6 +65,7 @@ const Login = () => {
       <Container component="main" maxWidth="xs">
         <Paper elevation={10} style={{ padding: "30px", borderRadius: "10px" }}>
           <Avatar style={{ margin: "auto", backgroundColor: "#3f51b5" }}>
+            <LockOutlinedIcon />
           </Avatar>
           <Typography
             variant="h5"
@@ -47,6 +75,15 @@ const Login = () => {
           >
             Login
           </Typography>
+          {error && (
+            <Typography
+              color="error"
+              align="center"
+              style={{ marginBottom: "15px" }}
+            >
+              {error}
+            </Typography>
+          )}
           <form onSubmit={handleSubmit}>
             <TextField
               margin="normal"
@@ -74,6 +111,17 @@ const Login = () => {
               color="primary"
               style={{ borderRadius: "5px" }}
             />
+            <Box
+              sx={{
+                color: "#007FFF",
+                textDecoration: "none",
+                "&:hover": { textDecoration: "underline" },
+              }}
+            >
+              <Link onClick={handleClickOpen} to="#">
+                Forgot your password?
+              </Link>
+            </Box>
             <Button
               type="submit"
               fullWidth
@@ -89,19 +137,23 @@ const Login = () => {
               Login
             </Button>
           </form>
+          <Grid2
+            container
+            justifyContent="center"
+            style={{ marginTop: "15px" }}
+          >
+            <Typography variant="body2">
+              Don't have an account?
+              <Button
+                onClick={() => navigate("/auth/register")}
+                color="primary"
+                style={{ textTransform: "none" }}
+              >
+                Register
+              </Button>
+            </Typography>
+          </Grid2>
         </Paper>
-        <Grid2 container justifyContent="center" style={{ marginTop: "15px" }}>
-          <Typography variant="body2">
-            Don't have an account?
-            <Button
-              onClick={() => navigate("/auth/register")}
-              color="primary"
-              style={{ textTransform: "none" }}
-            >
-              Register
-            </Button>
-          </Typography>
-        </Grid2>
       </Container>
       <footer className="mt-10 text-gray-200">
         &copy; 2024 My Ecommerce App. All rights reserved.
@@ -115,6 +167,7 @@ const Login = () => {
           d="M0,192L30,197.3C60,203,120,213,180,229.3C240,245,300,267,360,245.3C420,224,480,160,540,133.3C600,107,660,117,720,128C780,139,840,149,900,138.7C960,128,1020,96,1080,96C1140,96,1200,128,1260,144C1320,160,1380,160,1410,160L1440,160L1440,320L1410,320C1380,320,1320,320,1260,320C1200,320,1140,320,1080,320C1020,320,960,320,900,320C840,320,780,320,720,320C660,320,600,320,540,320C480,320,420,320,360,320C300,320,240,320,180,320C120,320,60,320,30,320H0Z"
         ></path>
       </svg>
+      <ForgotPassword open={open} setOpen={setOpen} handleClose={handleClose} />
     </div>
   );
 };

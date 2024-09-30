@@ -14,6 +14,10 @@ import { PublicGuard } from "./guard/public-guard";
 import { store } from "./store/store";
 import Layout from "./layout/layouts";
 import Products from "./pages/product/product";
+import Dashboard from "./pages/dashboard/dashboard";
+import ProductDetails from "./pages/product/product-details";
+import Cart from "./pages/cart/cart";
+import Order from "./pages/order/order";
 
 const router = createBrowserRouter([
   {
@@ -29,8 +33,24 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "products/:productId",
+        path: "",
+        element: <Dashboard />,
+      },
+      {
+        path: "products",
         element: <Products />,
+      },
+      {
+        path: "products/:productId",
+        element: <ProductDetails />,
+      },
+      {
+        path: "order",
+        element: <Order />,
+      },
+      {
+        path: "cart",
+        element: <Cart />,
       },
       {
         path: "about",
@@ -61,7 +81,6 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);

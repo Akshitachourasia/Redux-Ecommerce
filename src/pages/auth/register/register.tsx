@@ -105,7 +105,6 @@ const Register = () => {
               Register
             </Button>
           </form>
-        </Paper>
         <Grid2 container justifyContent="center" style={{ marginTop: "15px" }}>
           <Typography variant="body2">
             Already have an account?
@@ -118,6 +117,7 @@ const Register = () => {
             </Button>
           </Typography>
         </Grid2>
+        </Paper>
       </Container>
       <footer className="mt-10 text-gray-200">
         &copy; 2024 My Ecommerce App. All rights reserved.
